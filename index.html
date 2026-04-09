@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -9,9 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet" />
   <style>
-/* ================================================================
-   WALL CALENDAR — Design System
-   ================================================================ */
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -70,7 +68,7 @@ body {
 }
 @keyframes cardIn { from{opacity:0;transform:translateY(-20px) scale(.978);} to{opacity:1;transform:none;} }
 
-/* ── Hero ─────────────────────────────────────────────────────── */
+/* Hero */
 .hero {
   position:relative; height:190px; overflow:hidden; flex-shrink:0;
   background:linear-gradient(135deg,#1e3a5f 0%,#1d4ed8 45%,#0ea5e9 100%);
@@ -123,7 +121,7 @@ body {
 }
 .today-btn:hover { background:rgba(255,255,255,.22); border-color:rgba(255,255,255,.55); }
 
-/* ── Body Grid ────────────────────────────────────────────────── */
+/* Body Grid */
 .cal-body { display:grid; grid-template-columns:1fr 300px; flex:1; min-height:0; overflow:hidden; }
 
 /* Grid Panel */
@@ -177,7 +175,7 @@ body {
 .day-cell.rng-end   .day-num { background:var(--accent); color:#fff; font-weight:700; box-shadow:var(--shadow-acc); transform:scale(1.1); }
 .day-cell.single .day-num { background:var(--accent); color:#fff; font-weight:700; box-shadow:var(--shadow-acc); }
 
-/* ── Notes Panel ──────────────────────────────────────────────── */
+/* Notes Panel */
 .notes-panel {
   padding:12px 16px 14px;
   display:flex; flex-direction:column; gap:10px;
@@ -280,7 +278,7 @@ body {
 }
 .clear-btn:hover { border-color:var(--danger); color:var(--danger); background:rgba(239,68,68,.05); }
 
-/* ── Responsive ───────────────────────────────────────────────── */
+/* Responsive */
 @media(max-width:768px){
   body { padding:12px 10px; height:auto; overflow-y:auto; min-height:100vh; }
   #cal-stage { height:auto; }
@@ -311,17 +309,13 @@ body {
 </div>
 
 <script>
-/* ================================================================
-   WALL CALENDAR — Vanilla JS + DOM (no build step needed)
-   ================================================================ */
-'use strict';
 
 const MONTHS = ['January','February','March','April','May','June',
   'July','August','September','October','November','December'];
 const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 const STORAGE_KEY = 'wall-cal-v4';
 
-/* ── Utils ───────────────────────────────────────────────────── */
+/* Utils */
 function sameDay(a,b){ return a&&b&&a.toDateString()===b.toDateString(); }
 function isToday(d){ return sameDay(d,new Date()); }
 function isBetween(d,s,e){
@@ -337,7 +331,7 @@ function dayDiff(a,b){ return Math.round(Math.abs(b-a)/86400000); }
 function el(tag,cls,html){ const e=document.createElement(tag); if(cls)e.className=cls; if(html)e.innerHTML=html; return e; }
 function qs(sel,root){ return (root||document).querySelector(sel); }
 
-/* ── State ───────────────────────────────────────────────────── */
+/* State */
 let state = {
   curY: new Date().getFullYear(),
   curM: new Date().getMonth(),
@@ -350,7 +344,7 @@ let state = {
   noteMonth: '',
 };
 
-/* ── Persistence ─────────────────────────────────────────────── */
+/* Persistence */
 function loadPersisted(){
   try{
     const r = JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');
@@ -381,7 +375,7 @@ function noteKey(){
 function loadNote(){ try{ return localStorage.getItem(noteKey())||''; }catch{ return ''; } }
 function saveNote(v){ try{ localStorage.setItem(noteKey(),v); }catch{} }
 
-/* ── Render ──────────────────────────────────────────────────── */
+/* Render */
 function render(){
   const stage = document.getElementById('cal-stage');
   stage.innerHTML = '';
@@ -534,7 +528,7 @@ function buildDayCell(date, outside){
   cell.setAttribute('role','gridcell');
   cell.setAttribute('aria-label',`${fmtL(date)}${today?' (today)':''}${isStart?' (range start)':''}${isEnd?' (range end)':''}`);
   cell.setAttribute('aria-selected', String(!!(isStart||isEnd||inRange)));
-  // stamp date so hoverDate() can update classes in-place without rebuilding DOM
+  // keep date on element for range class updates
   const ds=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
   cell.dataset.date=ds;
   if(outside) cell.dataset.outside='1'; else cell.setAttribute('tabindex','0');
@@ -727,7 +721,7 @@ function buildFooter(){
   return foot;
 }
 
-/* ── Actions ─────────────────────────────────────────────────── */
+/* Actions */
 function navTo(y,m){
   let ny=y, nm=m;
   if(nm<0){ny--;nm=11;} if(nm>11){ny++;nm=0;}
@@ -787,7 +781,7 @@ function updateAllCellClasses(){
   });
 }
 
-/* ── Boot ────────────────────────────────────────────────────── */
+/* Boot */
 loadPersisted();
 render();
 </script>
